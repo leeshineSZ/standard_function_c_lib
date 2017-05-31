@@ -1,16 +1,18 @@
-CC = gcc  
-LD = gcc  
-CFLAGS = -Wall -c -Dgliethttp -I../include -L lib_path  
-LDFLAGS = -lpthread     
+#编译器
+CC = gcc
+#编译选项    
+CFLAGS = -Wall -std=gnu99  
 SRCS = $(wildcard *.c source/*.c)  
-OBJS = $(patsubst %c, %o, $(SRCS))  
-TARGET = gliethttp  
+OBJS = $(patsubst %c, %o, $(SRCS)) 
+#目标文件 
+TARGET = md5.exe  
 .PHONY: all clean     
 all: $(TARGET)     
 $(TARGET): $(OBJS)  
     $(LD) $(LDFLAGS) -o $@ $^     
 %o: %c  
-    $(CC) $(CFLAGS) -o $@ $<     
+    $(CC) $(CFLAGS) -o $@ $<
+#清除中间生成的.o文件和目标文件。    
 clean:  
     rm -f *.o $(TARGET)  
 
