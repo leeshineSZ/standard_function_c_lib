@@ -27,7 +27,7 @@ int main(int argc, char** argv)
     
     calculate_file = argv[1];
     if((fd = open(calculate_file, O_RDONLY)) == -1){
-        printf("Open %s fail : %d, error:%s\n", calculate_file,  errno, strerror(errno));
+        printf("Open %s fail : %s, error:%d\n", calculate_file, strerror(errno), errno);
         return -1;
     }
     
