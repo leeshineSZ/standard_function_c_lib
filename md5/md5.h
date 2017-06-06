@@ -38,7 +38,7 @@ extern "C" {
 #endif
 
 void MD5_Init(MD5_CTX *);
-void MD5_Update(MD5_CTX *, unsigned char *, unsigned int);
+void MD5_Update(MD5_CTX *ctx, const uint8_t * msg, int len);
 void MD5_Final(unsigned char [16], MD5_CTX *);
 
 #ifdef __cplusplus
