@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+ #include <fcntl.h>
 #include "md5.h"
 
 #define BUFF_SIZE  1024
@@ -25,11 +26,11 @@ int main(int argc, char** argv)
         return -1;
     }
     
-    MD5Init(&context);
+    MD5_Init(&context);
     
-    while((size_read = read(fd, buf, BUFF_SIZE) > 0){
+    while((size_read = read(fd, buf, BUFF_SIZE) > 0)){
         printf("read  end: %s\n", strerror(errno));
-        MD5Update(&context, buf, size_read);
+        MD5_Update(&context, buf, size_read);
     }
     if(size_read < 0){
         printf("read fail : %s\n", strerror(errno));
@@ -37,7 +38,7 @@ int main(int argc, char** argv)
     }
     
     if(size_read == 0){
-        MD5Final(digest, &context);
+        MD5_Final(digest, &context);
     }
     
     printf("%s md5:%s\n", calculate_file, digest);

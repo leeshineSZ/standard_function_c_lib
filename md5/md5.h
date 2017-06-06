@@ -24,7 +24,7 @@ documentation and/or software.
 #ifndef __MD5_H__
 #define __MD5_H__
 
-#include "c_types.h"
+#include <stdint.h>
 #include "global.h"
 
 typedef struct {
@@ -37,9 +37,9 @@ typedef struct {
 extern "C" {
 #endif
 
-void MD5Init(MD5_CTX *);
-void MD5Update(MD5_CTX *, unsigned char *, unsigned int);
-void MD5Final(unsigned char [16], MD5_CTX *);
+void MD5_Init(MD5_CTX *);
+void MD5_Update(MD5_CTX *, unsigned char *, unsigned int);
+void MD5_Final(unsigned char [16], MD5_CTX *);
 
 #ifdef __cplusplus
 }

@@ -31,7 +31,8 @@
 /**
  * This file implements the MD5 algorithm as defined in RFC1321
  */
-
+#include "md5.h"
+ 
 /* Constants for MD5Transform routine.
  */
 #define S11 7
@@ -50,6 +51,8 @@
 #define S42 10
 #define S43 15
 #define S44 21
+
+#define MD5_SIZE  16
 
 /* ----- static functions ----- */
 static void MD5Transform(uint32_t state[4], const uint8_t block[64]);
@@ -99,7 +102,7 @@ static const uint8_t PADDING[64] =
 /**
  * MD5 initialization - begins an MD5 operation, writing a new ctx.
  */
-EXP_FUNC void STDCALL ICACHE_FLASH_ATTR MD5_Init(MD5_CTX *ctx)
+void MD5_Init(MD5_CTX *ctx)
 {
     ctx->count[0] = ctx->count[1] = 0;
 
@@ -114,7 +117,7 @@ EXP_FUNC void STDCALL ICACHE_FLASH_ATTR MD5_Init(MD5_CTX *ctx)
 /**
  * Accepts an array of octets as the next portion of the message.
  */
-EXP_FUNC void STDCALL ICACHE_FLASH_ATTR MD5_Update(MD5_CTX *ctx, const uint8_t * msg, int len)
+void MD5_Update(MD5_CTX *ctx, const uint8_t * msg, int len)
 {
     uint32_t x;
     int i, partLen;
@@ -132,7 +135,7 @@ EXP_FUNC void STDCALL ICACHE_FLASH_ATTR MD5_Update(MD5_CTX *ctx, const uint8_t *
     /* Transform as many times as possible.  */
     if (len >= partLen) 
     {
-        memcpy(&ctx->buffer[x], msg, partLen);
+        memcpy((void*)(&ctx->buffer[x]), (void*)msg, partLen);
         MD5Transform(ctx->state, ctx->buffer);
 
         for (i = partLen; i + 63 < len; i += 64)
@@ -144,13 +147,13 @@ EXP_FUNC void STDCALL ICACHE_FLASH_ATTR MD5_Update(MD5_CTX *ctx, const uint8_t *
         i = 0;
 
     /* Buffer remaining input */
-    memcpy(&ctx->buffer[x], &msg[i], len-i);
+    memcpy((void*)(&ctx->buffer[x]), (void*)(&(msg[i])), len-i);
 }
 
 /**
  * Return the 128-bit message digest into the user's array
  */
-EXP_FUNC void STDCALL ICACHE_FLASH_ATTR MD5_Final(uint8_t *digest, MD5_CTX *ctx)
+void MD5_Final(uint8_t *digest, MD5_CTX *ctx)
 {
     uint8_t bits[8];
     uint32_t x, padLen;
@@ -174,7 +177,7 @@ EXP_FUNC void STDCALL ICACHE_FLASH_ATTR MD5_Final(uint8_t *digest, MD5_CTX *ctx)
 /**
  * MD5 basic transformation. Transforms state based on block.
  */
-static void ICACHE_FLASH_ATTR MD5Transform(uint32_t state[4], const uint8_t block[64])
+static void MD5Transform(uint32_t state[4], const uint8_t block[64])
 {
     uint32_t a = state[0], b = state[1], c = state[2], 
              d = state[3], x[MD5_SIZE];
@@ -263,7 +266,7 @@ static void ICACHE_FLASH_ATTR MD5Transform(uint32_t state[4], const uint8_t bloc
  * Encodes input (uint32_t) into output (uint8_t). Assumes len is
  *   a multiple of 4.
  */
-static void ICACHE_FLASH_ATTR Encode(uint8_t *output, uint32_t *input, uint32_t len)
+static void Encode(uint8_t *output, uint32_t *input, uint32_t len)
 {
     uint32_t i, j;
 
@@ -280,7 +283,7 @@ static void ICACHE_FLASH_ATTR Encode(uint8_t *output, uint32_t *input, uint32_t 
  *  Decodes input (uint8_t) into output (uint32_t). Assumes len is
  *   a multiple of 4.
  */
-static void ICACHE_FLASH_ATTR Decode(uint32_t *output, const uint8_t *input, uint32_t len)
+static void Decode(uint32_t *output, const uint8_t *input, uint32_t len)
 {
     uint32_t i, j;
 
